@@ -37,11 +37,11 @@ const generateAIWorm = (worldSize) => {
     direction,
     speed: 0.5 + Math.random() * 1.5, // Random speed
     isBoosterActive: false,
-    boosterCooldown: 0,
     boosterEnergy: 100,
     targetDirection: direction,
-    changeDirectionTime: 0,
-    turnSpeed: 0.05 + Math.random() * 0.05 // How fast the worm can turn
+    changeDirectionTime: Math.random() * 100, // Random initial time to change direction
+    turnSpeed: 0.05 + Math.random() * 0.05, // How fast the worm can turn
+    behavior: Math.floor(Math.random() * 3) // 0: wanderer, 1: predator, 2: avoider
   };
 };
 

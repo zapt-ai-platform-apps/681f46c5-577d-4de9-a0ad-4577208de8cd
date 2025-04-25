@@ -38,11 +38,6 @@ export default function App() {
             onRestart={restartGame}
           />
         )}
-        <div className="fixed bottom-2 right-2 text-xs text-gray-500">
-          <a href="https://www.zapt.ai" target="_blank" rel="noopener noreferrer">
-            Made on ZAPT
-          </a>
-        </div>
       </GameStateProvider>
     </div>
   );

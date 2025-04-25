@@ -85,7 +85,7 @@ const Game = ({ onGameOver }) => {
     if (!gameState || isGameOver) return;
 
     // Update player position based on velocity and booster
-    const speed = isBoosterActive ? 6 : 2;
+    const speed = isBoosterActive ? 8 : 4; // Doubled the speed (2x faster)
     const newX = playerPosition.x + playerVelocity.x * speed;
     const newY = playerPosition.y + playerVelocity.y * speed;
     
@@ -106,6 +106,61 @@ const Game = ({ onGameOver }) => {
     
     // Update camera to follow player
     setCameraPosition({ x: newX, y: newY });
+    
+    // Update AI worms movement
+    if (gameState.aiWorms && gameState.aiWorms.length > 0) {
+      gameState.aiWorms.forEach(worm => {
+        // Randomly change direction occasionally
+        if (Math.random() < 0.02) {
+          worm.targetDirection = Math.random() * Math.PI * 2;
+        }
+        
+        // Smoothly transition to target direction
+        const directionDiff = Math.atan2(
+          Math.sin(worm.targetDirection - worm.direction),
+          Math.cos(worm.targetDirection - worm.direction)
+        );
+        worm.direction += directionDiff * worm.turnSpeed;
+        
+        // Avoid world boundaries
+        const headX = worm.segments[0].x;
+        const headY = worm.segments[0].y;
+        
+        const boundaryMargin = 200;
+        if (headX < boundaryMargin || headX > WORLD_SIZE - boundaryMargin ||
+            headY < boundaryMargin || headY > WORLD_SIZE - boundaryMargin) {
+          // Steer away from boundaries
+          const centerX = WORLD_SIZE / 2;
+          const centerY = WORLD_SIZE / 2;
+          worm.targetDirection = Math.atan2(centerY - headY, centerX - headX);
+        }
+        
+        // Update worm position based on direction and speed
+        const wormSpeed = worm.isBoosterActive ? worm.speed * 1.5 : worm.speed;
+        const moveX = Math.cos(worm.direction) * wormSpeed;
+        const moveY = Math.sin(worm.direction) * wormSpeed;
+        
+        // Move head
+        const newHeadX = headX + moveX;
+        const newHeadY = headY + moveY;
+        
+        // Update segments (follow the leader)
+        worm.segments.unshift({ x: newHeadX, y: newHeadY });
+        worm.segments.pop();
+        
+        // Randomly activate booster
+        if (Math.random() < 0.005 && worm.boosterEnergy > 50) {
+          worm.isBoosterActive = true;
+        } else if (worm.isBoosterActive) {
+          worm.boosterEnergy -= 1;
+          if (worm.boosterEnergy <= 0) {
+            worm.isBoosterActive = false;
+          }
+        } else if (worm.boosterEnergy < 100) {
+          worm.boosterEnergy += 0.2;
+        }
+      });
+    }
     
     // Check collisions with food
     if (gameState) {

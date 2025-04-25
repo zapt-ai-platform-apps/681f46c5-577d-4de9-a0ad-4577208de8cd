@@ -4,12 +4,11 @@ import { useGameState } from '../../context/GameStateContext';
 const BoosterButton = () => {
   const { activateBooster, deactivateBooster } = useGameState();
   const [isPressed, setIsPressed] = useState(false);
-  const [cooldown, setCooldown] = useState(0);
   const [energy, setEnergy] = useState(100);
   
   // Handle booster activation
   useEffect(() => {
-    if (isPressed && energy > 0 && cooldown === 0) {
+    if (isPressed && energy > 0) {
       activateBooster();
       
       // Drain energy while booster is active
@@ -19,7 +18,6 @@ const BoosterButton = () => {
           if (newEnergy === 0) {
             setIsPressed(false);
             deactivateBooster();
-            setCooldown(100); // Start cooldown when energy is depleted
           }
           return newEnergy;
         });
@@ -30,32 +28,21 @@ const BoosterButton = () => {
         deactivateBooster();
       };
     }
-  }, [isPressed, energy, cooldown, activateBooster, deactivateBooster]);
+  }, [isPressed, energy, activateBooster, deactivateBooster]);
   
   // Handle energy regeneration when booster is not active
   useEffect(() => {
     if (!isPressed && energy < 100) {
       const interval = setInterval(() => {
-        setEnergy(prev => Math.min(100, prev + 0.5));
-      }, 100);
+        setEnergy(prev => Math.min(100, prev + 1)); // Faster regeneration
+      }, 50); // Regenerate twice as fast
       
       return () => clearInterval(interval);
     }
   }, [isPressed, energy]);
   
-  // Handle cooldown
-  useEffect(() => {
-    if (cooldown > 0) {
-      const interval = setInterval(() => {
-        setCooldown(prev => Math.max(0, prev - 1));
-      }, 50);
-      
-      return () => clearInterval(interval);
-    }
-  }, [cooldown]);
-  
   const handlePress = () => {
-    if (energy > 0 && cooldown === 0) {
+    if (energy > 0) {
       setIsPressed(true);
     }
   };
@@ -64,12 +51,8 @@ const BoosterButton = () => {
     setIsPressed(false);
   };
   
-  // Calculate the fill colors based on energy and cooldown
+  // Calculate the fill colors based on energy
   const getFillStyle = () => {
-    if (cooldown > 0) {
-      return { backgroundColor: `rgba(100, 100, 100, ${cooldown / 100})` };
-    }
-    
     const intensity = energy / 100;
     return {
       backgroundColor: isPressed 
@@ -88,11 +71,7 @@ const BoosterButton = () => {
       onTouchEnd={handleRelease}
     >
       <div className="flex flex-col items-center justify-center">
-        {cooldown > 0 ? (
-          <span className="text-xs">COOLING</span>
-        ) : (
-          <span className="text-lg">BOOST</span>
-        )}
+        <span className="text-lg">BOOST</span>
         <div className="w-full h-1 bg-gray-700 mt-1">
           <div 
             className="h-full bg-white" 
