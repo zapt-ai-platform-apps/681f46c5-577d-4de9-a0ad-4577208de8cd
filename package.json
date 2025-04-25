@@ -1,7 +1,7 @@
 {
-    "name": "reactjs-vite-tailwind-vercel",
+    "name": "maulana-worm-io",
     "version": "1.0.0",
-    "description": "ReactJS app with Vite, Tailwind",
+    "description": "Maulana Worm.io - Single Player Snake Game",
     "type": "module",
     "scripts": {
         "dev": "vite",
@@ -11,8 +11,11 @@
     },
     "dependencies": {
         "@sentry/browser": "^8.41.0",
+        "konva": "^9.3.3",
         "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "react-dom": "^18.2.0",
+        "react-konva": "^18.2.10",
+        "uuid": "^9.0.1"
     },
     "devDependencies": {
         "@vitejs/plugin-react": "^4.3.4",
