@@ -1,50 +1,38 @@
-# Maulana Worm.io
+# Aplikasi Manajemen Telur
 
-A single-player snake game inspired by Slither.io where you control a worm that needs to collect food, grow longer, and survive among 200 AI-controlled worms.
+Aplikasi untuk menghitung dan melacak distribusi dan produksi telur dengan menggunakan IndexedDB sebagai penyimpanan data.
 
-## Game Features
+## Fitur
 
-- Large game map with clear boundaries
-- Player-controlled worm with smooth controls
-- 200 AI-controlled worms with various sizes and behaviors
-- Thousands of food particles scattered throughout the map
-- Power-ups with different effects
-- Analog joystick controls for movement
-- Booster button for temporary speed increase
-- Mini-map that shows your position and other worms
-- Score based on length and survival time
+- Melacak produksi telur dalam satuan butir
+- Melacak distribusi telur dalam satuan kg dan peti
+- Konversi otomatis antara satuan:
+  - 16 butir = 1 kg
+  - 10 kg = 1 peti
+- Laporan produksi dan distribusi
+- Manajemen tanggal dengan kalender
+- Penyimpanan data lokal menggunakan IndexedDB
 
-## How to Play
+## Teknologi
 
-- Use the analog stick (bottom left) to move your worm
-- Press and hold the boost button (bottom right) for temporary speed boost
-- Collect food particles to grow longer
-- Avoid hitting other worms and the map boundaries
-- Collect power-ups for special abilities
-
-## Game Rules
-
-- You die if you hit the map boundary
-- You die if you hit another worm
-- When you die, you leave food particles for others
-- The longer you survive and the more you eat, the higher your score
-
-## Development
-
-This game is built with:
 - React
-- Konva.js for canvas-based rendering
-- Tailwind CSS for UI styling
+- IndexedDB (dengan idb)
+- TailwindCSS
+- Vite
 
-## Installation
+## Pengembangan Lokal
 
-```bash
-npm install
-npm run dev
+1. Clone repositori
+2. Install dependensi dengan `npm install`
+3. Jalankan server pengembangan dengan `npm run dev`
+4. Buka browser di `http://localhost:5173`
+
+## Build Produksi
+
+Untuk membuat versi produksi:
+
 ```
-
-## Build
-
-```bash
 npm run build
 ```
+
+Output build akan ada di folder `dist`.

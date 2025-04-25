@@ -1,44 +1,34 @@
 import React, { useState } from 'react';
-import Game from './components/Game';
-import StartScreen from './components/StartScreen';
-import GameOverScreen from './components/GameOverScreen';
-import { GameStateProvider } from './context/GameStateContext';
+import Navigation from './modules/core/components/Navigation';
+import Dashboard from './modules/dashboard/components/Dashboard';
+import Production from './modules/production/components/Production';
+import Distribution from './modules/distribution/components/Distribution';
+import Reports from './modules/reports/components/Reports';
 
 export default function App() {
-  const [gameState, setGameState] = useState('start'); // start, playing, gameOver
-  const [finalScore, setFinalScore] = useState(0);
-  const [finalLength, setFinalLength] = useState(0);
-  const [finalTime, setFinalTime] = useState(0);
+  const [activeTab, setActiveTab] = useState('dashboard');
 
-  const startGame = () => {
-    setGameState('playing');
-  };
-
-  const endGame = (score, length, time) => {
-    setFinalScore(score);
-    setFinalLength(length);
-    setFinalTime(time);
-    setGameState('gameOver');
-  };
-
-  const restartGame = () => {
-    setGameState('playing');
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'dashboard':
+        return <Dashboard />;
+      case 'production':
+        return <Production />;
+      case 'distribution':
+        return <Distribution />;
+      case 'reports':
+        return <Reports />;
+      default:
+        return <Dashboard />;
+    }
   };
 
   return (
-    <div className="h-full min-h-screen bg-gray-900 text-white overflow-hidden">
-      <GameStateProvider>
-        {gameState === 'start' && <StartScreen onStart={startGame} />}
-        {gameState === 'playing' && <Game onGameOver={endGame} />}
-        {gameState === 'gameOver' && (
-          <GameOverScreen
-            score={finalScore}
-            length={finalLength}
-            time={finalTime}
-            onRestart={restartGame}
-          />
-        )}
-      </GameStateProvider>
+    <div className="h-full min-h-screen bg-gray-50 flex flex-col">
+      <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
+      <main className="flex-grow p-4 md:p-6 container mx-auto">
+        {renderContent()}
+      </main>
     </div>
   );
 }
